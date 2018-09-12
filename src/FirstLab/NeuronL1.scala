@@ -3,26 +3,27 @@ package FirstLab
 import scala.math._
 
 class NeuronL1(val x: Double, val yExpected: Double, val weight: Double, val deltaMax: Double) {
-
   var w: Double = weight
+  private var i = 1
 
 
   /**
     * In this method neuron trains.
-    * @return velue of weight
+    * @return value of weight
     * */
-  def training() = {
-    var yi = 0.0
-    var xi = 0.0
-    do {
-      xi = x * w
-      yi = sigmoid(xi)
+  def training():Double = {
+    val xi = x * w
+    val yi = sigmoid(xi)
+    if (abs((yExpected - yi) / yExpected) > deltaMax) {
       val deltaI = sigmoidPrime(yi)
       val deltaW = deltaI * x
       w = w + deltaW
-    } while (abs((yExpected - yi) / yExpected) > deltaMax)
-    println("Res y: " + yi)
-    w
+      i += 1
+      training()
+    } else {
+      println("Res y: " + yi + "\nRes x: " + xi + "\ni = " + i)
+      w
+    }
   }
 
   /**
